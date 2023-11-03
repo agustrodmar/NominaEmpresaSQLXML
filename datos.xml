@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Datos>
+  <Empresas>
+    <Empresa CIF="324587" Direccion="Desengaño 21" FechaFundacion="2001-01-01" Nombre="Copinsa.SA">
+      <Empleados/>
+      <Nominas/>
+    </Empresa>
+  </Empresas>
+</Datos>
