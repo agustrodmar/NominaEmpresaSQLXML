@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<empresas>
+  <empresa cif="2222" direccion="Calle san juan" fechaCreacion="2001-01-01" nombreEmpresa="Alemani">
+    <empleado apellidos="Rodriguez Alfon" dni="49079432p" empresaCif="2222" fechaNacimiento="1992-02-02" nombre="Antonio Miguel" puestoTrabajo="gerente">
+      <nomina apellidos="Rodriguez Alfon" dniEmpleado="49079432p" irpf="10.0" nombre="Antonio Miguel" numeroSeguridadSocial="8888" sueldoBase="670.0" trienios="7"/>
+    </empleado>
+  </empresa>
+  <empresa cif="3333" direccion="Calle albaricoque" fechaCreacion="2002-02-02" nombreEmpresa="INDITEX">
+    <empleado apellidos="Rodriguez Marquez" dni="49075966s" empresaCif="3333" fechaNacimiento="1991-03-18" nombre="Magdalena" puestoTrabajo="Directora"/>
+  </empresa>
+</empresas>

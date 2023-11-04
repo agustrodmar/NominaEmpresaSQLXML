@@ -1,66 +1,56 @@
 @file:Suppress("SpellCheckingInspection")
 
-package pais
-import pais.Pais.TablaEmpleado
-import pais.Pais.TablaEmpresa
-import pais.Pais.TablaNomina
-import java.math.BigDecimal
-import java.sql.*
+import java.util.*
 
+/**
+ * Función principal que gestiona la inserción de empresas, empleados y nóminas en la base de datos.
+ */
 fun main() {
+    // Creación de los objetos necesarios para la gestión de la base de datos y la inserción de datos
+    val conexionBD = ConexionBD()
+    val gestorTablas = GestorTablas(conexionBD)
+    val insertarObjetos = InsertarObjetos()
+    val generadorXML = GeneradorXML()
 
-    // Datos de conexión
-    val jdbcUrl = "jdbc:mysql://localhost:3306/curso_sql"
-    val usuario = "root"
-    val contrasena = "1234"
-    var conexion: Connection? = null
+    // Me conecto a la Base de Datos SQL
+    conexionBD.conectar()
 
-    // Listas para guardar los objetos creados
-    val empresas = mutableListOf<Empresa>()
-    val empleados = mutableListOf<Empleado>()
-    val nominas = mutableListOf<Nomina>()
+    // Creo las tablas en la Base de Datos SQL
+    gestorTablas.crearTablas()
 
-    try {
-        // Carga el controlador JDBC
-        Class.forName("com.mysql.cj.jdbc.Driver")
+    // Bucle para la inserción de empresas en la BD SQL
+    while (true) {
+        println("¿Quieres insertar una empresa? (s/n)")
+        val respuesta = readln()
+        if (respuesta.lowercase(Locale.getDefault()) != "s") break
 
-        // Establece la conexión
-        conexion = DriverManager.getConnection(jdbcUrl, usuario, contrasena)
-
-        // Crea las tablas
-        TablaEmpresa.crear(conexion)
-        TablaEmpleado.crear(conexion)
-        TablaNomina.crear(conexion)
-
-        println("Las tablas 'Empresa', 'Empleado' y 'Nomina' se han creado con éxito.")
-
-        // Crea un objeto Empleado y Nomina
-        val empleado1 = Empleado("12345678Z", "Juan", "Pérez", Date.valueOf("1980-01-01"), "Gerente", "A12345678")
-        val empleado2 = Empleado("23454632f", "Antonio", "Sánchez", Date.valueOf("1999-01-01"), "Presidente", "A12345678")
-        val nomina1 = Nomina("12345678Z", "123456789012", "Juan", "Pérez", BigDecimal("15.00"), BigDecimal("20000.00"), 3, "A12345678")
-        val nomina2 = Nomina("23454632f", "210987654321", "Antonio", "Sánchez", BigDecimal("25.00"), BigDecimal("35000.00"), 6, "A12345678")
-        val laEmpresa = Empresa("324587", "Copinsa.SA", "Desengaño 21", Date.valueOf("2001-01-01"))
-
-        // Añade los objetos a las listas correspondientes
-        empleados.add(empleado1)
-        empleados.add(empleado2)
-        nominas.add(nomina1)
-        nominas.add(nomina2)
-        empresas.add(laEmpresa)
-
-        // Inserta los objetos Empleado y Nomina en las tablas correspondientes
-        TablaEmpleado.insertar(conexion, empleado1)
-        TablaEmpleado.insertar(conexion, empleado2)
-        TablaNomina.insertar(conexion, nomina1)
-        TablaNomina.insertar(conexion, nomina2)
-        TablaEmpresa.insertar(conexion, laEmpresa)
-
-    } catch (e: SQLException) {
-        e.printStackTrace()
-    } finally {
-        conexion?.close()
+        val empresa = insertarObjetos.insertarEmpresa()
+        gestorTablas.insertarEmpresa(empresa)
     }
 
-    // Llamo a mi clase para pasar los objetos que he insertado en SQL a XML
-    convertirObjetosAXml(empresas, empleados, nominas)
+    // Bucle para la inserción de empleados en la BD SQL>
+    while (true) {
+        println("¿Quieres insertar un empleado? (s/n)")
+        val respuesta = readln()
+        if (respuesta.lowercase(Locale.getDefault()) != "s") break
+
+        val empleado = insertarObjetos.insertarEmpleado()
+        gestorTablas.insertarEmpleado(empleado)
+    }
+
+    // Bucle para la inserción de nóminas en la BD SQL>
+    while (true) {
+        println("¿Quieres insertar una nómina? (s/n)")
+        val respuesta = readln()
+        if (respuesta.lowercase(Locale.getDefault()) != "s") break
+
+        val nomina = insertarObjetos.insertarNomina()
+        gestorTablas.insertarNomina(nomina)
+    }
+
+    // Genero BD en XML con los datos de las empresas, empleados y nóminas
+    generadorXML.generarXML(insertarObjetos.empresas, insertarObjetos.empleados,insertarObjetos.nominas)
+
+    // Desconexión de la base de datos
+    conexionBD.desconectar()
 }
